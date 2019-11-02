@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import com.example.myapplication.RequiestTest.RequestService;
 import com.example.myapplication.RequiestTest.ResponseRec;
 import com.example.myapplication.ResponseModel.User;
+import com.example.myapplication.Spider.*;
 import com.google.gson.Gson;
 
 import retrofit2.Call;
@@ -44,11 +44,36 @@ public class MainActivity extends AppCompatActivity {
                 login(account,pswd);
             }
         });
+
+        bt_send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        test.testLook(et_account.getText().toString());
+                        }
+                }).start();
+
+            }
+        });
     }
+
+    private  void testIntro(){
+        Introduction introduction= new IntroductionBuilder().getIntroduction("https://qxs.la","/72918/");
+        System.out.println("作者："+introduction.getAuthor());
+        System.out.println("小说名："+introduction.getName());
+        System.out.println("类型："+introduction.getStyle());
+        System.out.println("简介："+introduction.getIntroduction());
+        for(Chapter chapter : introduction.getCatalog()){
+            System.out.println(chapter.getName()+"链接："+chapter.getContent());
+        }
+    }
+
     public void login(String account,String pswd)
     {
         Retrofit retrofit= new Retrofit.Builder()
-            .baseUrl("http://10.26.11.191:8080/")
+            .baseUrl("http://10.26.20.111:8080/")
             .addConverterFactory(GsonConverterFactory.create(new Gson()))
             .build();
         RequestService requestService = retrofit.create(RequestService.class);

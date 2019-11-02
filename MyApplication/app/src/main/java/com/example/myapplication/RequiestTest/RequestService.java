@@ -9,7 +9,7 @@ import retrofit2.http.POST;
 
 public interface RequestService {
 
-    @POST("toLogin")
+    @POST("/toLogin")
     @FormUrlEncoded
     Call<ResponseRec<User>> getCall(@Field("username") String account, @Field("pswd")String pswd);
 }
